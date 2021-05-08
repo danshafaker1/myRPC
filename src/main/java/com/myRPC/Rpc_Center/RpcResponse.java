@@ -1,5 +1,6 @@
 package com.myRPC.Rpc_Center;
 
+import com.myRPC.enum_util.ResponseCode;
 import lombok.Data;
 
 import java.io.Serializable;

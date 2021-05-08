@@ -1,4 +1,4 @@
-package com.myRPC.Rpc_Center;
+package com.myRPC.enum_util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
