@@ -6,14 +6,17 @@ import com.myRPC.enum_util.PackageType;
 import com.myRPC.enum_util.RpcError;
 import com.myRPC.exception.RpcException;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.ReplayingDecoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-public class CommonDecoder extends ReplayingDecoder {
+
+public class CommonDecoder extends ByteToMessageDecoder {
 
 
     private static final Logger logger = LoggerFactory.getLogger(CommonDecoder.class);

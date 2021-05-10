@@ -6,11 +6,13 @@ import com.myRPC.Rpc_Center.RpcResponse;
 import com.myRPC.util.CommonDecoder;
 import com.myRPC.util.CommonEncoder;
 import com.myRPC.util.JsonSerializer;
+import com.myRPC.util.KryoSerializer;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.util.AttributeKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +41,9 @@ public class NettyClient implements RpcClient {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new CommonDecoder())
-                                .addLast(new CommonEncoder(new JsonSerializer()))
+                        pipeline.addLast(new LengthFieldBasedFrameDecoder(1024,12,4,0,0))
+                                .addLast(new CommonDecoder())
+                                .addLast(new CommonEncoder(new KryoSerializer()))
                                 .addLast(new NettyClientHandler());
                     }
                 });
