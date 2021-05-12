@@ -3,8 +3,8 @@ package com.myRPC.Netty_Center;
 import com.myRPC.Rpc_Center.RequestHandler;
 import com.myRPC.Rpc_Center.RpcRequest;
 import com.myRPC.Rpc_Center.RpcResponse;
-import com.myRPC.service.ServiceRegistry;
-import com.myRPC.service.impl.DefaultServiceRegistry;
+import com.myRPC.service.ServiceProvider;
+import com.myRPC.service.impl.ServiceProviderImpl;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,11 +18,11 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServerHandler.class);
     private static RequestHandler requestHandler;
-    private static ServiceRegistry serviceRegistry;
+    private static ServiceProvider serviceProvider;
 
     static {
         requestHandler = new RequestHandler();
-        serviceRegistry = new DefaultServiceRegistry();
+        serviceProvider = new ServiceProviderImpl();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<RpcRequest> 
         try {
             logger.info("服务器接收到请求: {}", msg);
             String interfaceName = msg.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
+            Object service = serviceProvider.getService(interfaceName);
             Object result = requestHandler.handle(msg, service);
             ChannelFuture future = ctx.writeAndFlush(RpcResponse.success(result));
             future.addListener(ChannelFutureListener.CLOSE);

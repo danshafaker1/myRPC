@@ -6,12 +6,14 @@ import com.myRPC.Rpc_Center.RpcClient;
 import com.myRPC.Rpc_Center.RpcClientProxy;
 import com.myRPC.pojo.HelloObject;
 import com.myRPC.service.HelloService;
+import com.myRPC.util.KryoSerializer;
 
 public class TestNettyClient {
 
     public static void main(String[] args) {
 
-        RpcClient client=new NettyClient("localhost",9999);
+        RpcClient client=new NettyClient();
+        client.setSerializer(new KryoSerializer());
         RpcClientProxy rpcClientProxy=new RpcClientProxy(client);
         HelloService helloService=rpcClientProxy.getProxy(HelloService.class);
         HelloObject object=new HelloObject(12,"This is a msg");

@@ -2,7 +2,7 @@ package com.myRPC.service.impl;
 
 import com.myRPC.enum_util.RpcError;
 import com.myRPC.exception.RpcException;
-import com.myRPC.service.ServiceRegistry;
+import com.myRPC.service.ServiceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DefaultServiceRegistry implements ServiceRegistry {
+public class ServiceProviderImpl implements ServiceProvider {
 
-    private static final Logger logger= LoggerFactory.getLogger(DefaultServiceRegistry.class);
+    private static final Logger logger= LoggerFactory.getLogger(ServiceProviderImpl.class);
 
     private static final Map<String,Object> serviceMap=new ConcurrentHashMap<>();
     private static Set<String> registeredService=ConcurrentHashMap.newKeySet();
@@ -20,7 +20,7 @@ public class DefaultServiceRegistry implements ServiceRegistry {
 
 
     @Override
-    public synchronized <T> void register(T service) {
+    public synchronized <T> void addServiceProvider(T service) {
         String serviceName=service.getClass().getCanonicalName();
         if(registeredService.add(serviceName)==false) return;
         //获得所有接口

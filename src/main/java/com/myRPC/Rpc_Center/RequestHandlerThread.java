@@ -1,6 +1,6 @@
 package com.myRPC.Rpc_Center;
 
-import com.myRPC.service.ServiceRegistry;
+import com.myRPC.service.ServiceProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,12 +15,12 @@ public class RequestHandlerThread implements Runnable{
 
     private Socket socket;
     private RequestHandler requestHandler;
-    private ServiceRegistry serviceRegistry;
+    private ServiceProvider serviceProvider;
 
-    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceRegistry serviceRegistry) {
+    public RequestHandlerThread(Socket socket, RequestHandler requestHandler, ServiceProvider serviceProvider) {
         this.socket = socket;
         this.requestHandler = requestHandler;
-        this.serviceRegistry = serviceRegistry;
+        this.serviceProvider = serviceProvider;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class RequestHandlerThread implements Runnable{
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream())) {
             RpcRequest rpcRequest = (RpcRequest) objectInputStream.readObject();
             String interfaceName = rpcRequest.getInterfaceName();
-            Object service = serviceRegistry.getService(interfaceName);
+            Object service = serviceProvider.getService(interfaceName);
             Object result = requestHandler.handle(rpcRequest, service);
             objectOutputStream.writeObject(RpcResponse.success(result));
             objectOutputStream.flush();
