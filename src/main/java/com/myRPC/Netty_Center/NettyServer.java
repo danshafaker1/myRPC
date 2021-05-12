@@ -1,10 +1,12 @@
 package com.myRPC.Netty_Center;
 
+import com.myRPC.LoadBalance.Impl.RoundRobinLoadBalancer;
 import com.myRPC.Rpc_Center.RpcServer;
 import com.myRPC.enum_util.RpcError;
 import com.myRPC.exception.RpcException;
 import com.myRPC.service.ServiceProvider;
 import com.myRPC.service.ServiceRegistry;
+import com.myRPC.service.impl.BalanceNacosServiceRegistry;
 import com.myRPC.service.impl.NacosServiceRegistry;
 import com.myRPC.service.impl.ServiceProviderImpl;
 import com.myRPC.util.*;
@@ -34,7 +36,7 @@ public class NettyServer implements RpcServer {
     public NettyServer(String host, int port) {
         this.host = host;
         this.port = port;
-        serviceRegistry = new NacosServiceRegistry();
+        serviceRegistry = new BalanceNacosServiceRegistry(new RoundRobinLoadBalancer());
         serviceProvider = new ServiceProviderImpl();
     }
 
@@ -66,6 +68,7 @@ public class NettyServer implements RpcServer {
                         }
                     });
             ChannelFuture future = serverBootstrap.bind(host,port).sync();
+            ShutdownHook.getShutdownHook().addClearAllHook();
             future.channel().closeFuture().sync();
         }catch (InterruptedException e) {
                             logger.error("启动服务器时有错误发生: ", e);

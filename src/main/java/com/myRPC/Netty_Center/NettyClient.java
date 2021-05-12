@@ -27,7 +27,6 @@ public class NettyClient implements RpcClient {
     private static final Logger logger = LoggerFactory.getLogger(NettyClient.class);
 
 
-    private static final Bootstrap bootstrap;
     private CommonSerializer serializer;
     private ServiceRegistry serviceRegistry;
 
@@ -38,13 +37,7 @@ public class NettyClient implements RpcClient {
         this.serviceRegistry=new NacosServiceRegistry();
     }
 
-    static {
-        EventLoopGroup group = new NioEventLoopGroup();
-        bootstrap = new Bootstrap();
-        bootstrap.group(group)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.SO_KEEPALIVE,true);
-    }
+
 
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {
