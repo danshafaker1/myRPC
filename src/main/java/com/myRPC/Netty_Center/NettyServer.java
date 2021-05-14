@@ -1,6 +1,7 @@
 package com.myRPC.Netty_Center;
 
 import com.myRPC.LoadBalance.Impl.RoundRobinLoadBalancer;
+import com.myRPC.Rpc_Center.AbstractRpcServer;
 import com.myRPC.Rpc_Center.RpcServer;
 import com.myRPC.enum_util.RpcError;
 import com.myRPC.exception.RpcException;
@@ -23,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
-public class NettyServer implements RpcServer {
+public class NettyServer extends AbstractRpcServer {
 
     private static final Logger logger= LoggerFactory.getLogger(NettyServer.class);
 
@@ -33,14 +34,21 @@ public class NettyServer implements RpcServer {
     private final ServiceProvider serviceProvider;
     private CommonSerializer serializer;
 
-    public NettyServer(String host, int port) {
+    public NettyServer(String host, int port,Integer serializer) {
         this.host = host;
         this.port = port;
         serviceRegistry = new BalanceNacosServiceRegistry(new RoundRobinLoadBalancer());
         serviceProvider = new ServiceProviderImpl();
+        this.serializer=CommonSerializer.getByCode(serializer);
+        scanServices();
     }
 
 
+    @Override
+    public <T> void publishService(T service, String serviceName) {
+        serviceProvider.addServiceProvider(service,serviceName);
+        serviceRegistry.register(serviceName,new InetSocketAddress(host,port));
+    }
 
     @Override
     public void start() {
@@ -80,16 +88,7 @@ public class NettyServer implements RpcServer {
 
     }
 
-    @Override
-    public <T> void publishService(Object service, Class<T> serviceClass) {
-        if(serializer == null) {
-            logger.error("未设置序列化器");
-            throw new RpcException(RpcError.SERIALIZER_NOT_FOUND.getMsg());
-        }
-        serviceProvider.addServiceProvider(service);
-        serviceRegistry.register(serviceClass.getCanonicalName(), new InetSocketAddress(host, port));
-        start();
-    }
+
 
     @Override
     public void setSerializer(CommonSerializer serializer) {

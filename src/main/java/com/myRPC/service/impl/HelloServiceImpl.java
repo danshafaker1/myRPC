@@ -1,11 +1,13 @@
 package com.myRPC.service.impl;
 
+import com.myRPC.annotion.Service;
 import com.myRPC.pojo.HelloObject;
 import com.myRPC.service.HelloService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@Service
 public class HelloServiceImpl implements HelloService {
 
     private static final Logger logger= LoggerFactory.getLogger(HelloServiceImpl.class);

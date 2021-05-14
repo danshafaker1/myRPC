@@ -20,8 +20,7 @@ public class ServiceProviderImpl implements ServiceProvider {
 
 
     @Override
-    public synchronized <T> void addServiceProvider(T service) {
-        String serviceName=service.getClass().getCanonicalName();
+    public synchronized <T> void addServiceProvider(T service,String serviceName) {
         if(registeredService.add(serviceName)==false) return;
         //获得所有接口
         Class<?>[] interfaces=service.getClass().getInterfaces();

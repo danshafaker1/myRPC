@@ -31,13 +31,9 @@ public class NettyClient implements RpcClient {
     private ServiceRegistry serviceRegistry;
 
 
-
-
     public NettyClient(){
         this.serviceRegistry=new NacosServiceRegistry();
     }
-
-
 
     @Override
     public Object sendRequest(RpcRequest rpcRequest) {

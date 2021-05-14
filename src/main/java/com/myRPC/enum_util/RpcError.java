@@ -17,6 +17,8 @@ public enum RpcError {
     UNKNOWN_PACKAGE_TYPE("不识别的数据包类型"),
     REGISTER_SERVICE_FAILED("注册服务失败"),
     SERIALIZER_NOT_FOUND("没有初始序列化器"),
+    SERVICE_SCAN_PACKAGE_NOT_FOUND("未扫描到指定的RPC服务"),
+    UNKNOWN_ERROR("未知错误"),
     FAILED_TO_CONNECT_TO_SERVICE_REGISTRY("连接不到服务中心");
     private final String msg;
 
